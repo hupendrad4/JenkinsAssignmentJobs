@@ -1,0 +1,33 @@
+pipeline {
+  agent {
+    label 'masternodes'
+  }
+
+  stages {
+
+    stage('parallel Task A & C') {
+      parallel {
+        stage('Print Job Name & Node Name') {
+          steps {
+            echo "The ${JOB_NAME} run on ${NODE_NAME}"
+            sh 'echo "The ${JOB_NAME} run on ${NODE_NAME}" > /home/node1/Hupendra/DummyFile.txt'
+
+          }
+        }
+
+        stage('Create File') {
+          steps {
+            sh 'cat > command.output'
+          }
+        }
+      }
+    }
+    stage('Create Directory & Copy File') {
+      steps {
+        sh 'mkdir -p /home/node1/Hupendra'
+        sh 'cp -fp /home/node1/workspace/copycommandoutput/command.output /home/node1/Hupendra'
+
+      }
+    }
+  }
+}
