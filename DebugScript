@@ -1,0 +1,19 @@
+def deployToServer(server) {
+    echo "${server}"
+}
+
+pipeline {
+    agent any
+    stages {
+        stage('Deploy') {
+            steps {
+                script {
+                    def servers = ['server1.example.com', 'server2.example.com', 'server3.example.com']
+                    for (server in servers) {
+                        deployToServer(server)
+                    }
+                }
+            }
+        }
+    }
+}
