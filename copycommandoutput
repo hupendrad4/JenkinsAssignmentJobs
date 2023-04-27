@@ -1,27 +1,35 @@
+// define variables
+def ssh = "/usr/bin/ssh"
+def scp = "/usr/bin/scp"
+def mkdir = "/usr/bin/mkdir"
+
 pipeline {
     agent {
         label 'masternodes'
     }
+    
     stages {
         stage('parallel Task A & C') {
             parallel {
                 stage('Print Job Name & Node Name') {
                     steps {
-                        echo "The ${JOB_NAME} run on ${NODE_NAME}"
-                        sh 'echo "The ${JOB_NAME} run on ${NODE_NAME}" > ${WORKSPACE}/myfile.txt'
+                        sh 'echo "The ${JOB_NAME} run on ${NODE_NAME}"'
+                        echo "the global email is ${var_email}"
                     }
                 }
-                stage('Create File') {
+                stage("create file") {
                     steps {
-                        sh 'cat > command.output'
+                        sh 'ls -la > command.output'
+                        echo "command output is redirected to the command.output file"
                     }
                 }
             }
         }
-        stage('Create Directory & Copy File') {
+        stage("copy file to jenkins") {
             steps {
-                sh 'mkdir -p ${WORKSPACE}/Hupendra'
-                sh 'cp -fp ${WORKSPACE}/command.output ${WORKSPACE}/Hupendra'
+                sh "${ssh} jenkins@192.168.1.10 ${mkdir} -p /home/jenkins/Hupendra"
+                echo "folder of your name is created on jenkins"
+                sh "${scp} /jenkins-node/workspace/copycommandoutput/command.output jenkins@192.168.1.10:/home/jenkins/Hupendra"
             }
         }
     }
