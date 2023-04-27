@@ -1,0 +1,19 @@
+
+@Library('my-shared-library') _
+
+pipeline {
+    agent {
+        node {
+            label 'node1' 
+        }
+    }
+    stages {
+        stage('Stage') {
+            steps {
+                script {
+                    mySharedLibraryFunction()
+                }
+            }
+        }
+    }
+}
