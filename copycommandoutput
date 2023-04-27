@@ -27,9 +27,9 @@ pipeline {
         }
         stage("copy file to jenkins") {
             steps {
-                sh "${ssh} jenkin@192.168.1.10 ${mkdir} -p /home/jenkins/Hupendra"
+                sh "${ssh} jenkin@192.168.1.10 ${mkdir} -p /home/jenkin/Hupendra"
                 echo "folder of your name is created on jenkins"
-                sh "${scp} /jenkins-node/workspace/copycommandoutput/command.output jenkin@192.168.1.10:/home/jenkins/Hupendra"
+                sh "${scp} /jenkins-node/workspace/copycommandoutput/command.output jenkin@192.168.1.10:/home/jenkin/Hupendra"
             }
         }
     }
