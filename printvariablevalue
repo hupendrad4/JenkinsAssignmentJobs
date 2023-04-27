@@ -1,0 +1,14 @@
+pipeline {
+ agent {
+  label 'masternodes'
+ }
+  stages {
+    stage('Print Job Name and Node Name') {
+      steps {
+        sh 'echo "The Build Number is ${BUILD_NUMBER} , ran by User: ${USER} and User Email is : ${var_email}"  > /home/node1/Hupendra/BuildDetails.txt'
+      }
+    }
+
+  }
+
+}
