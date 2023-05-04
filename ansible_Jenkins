@@ -14,7 +14,7 @@ pipeline {
         }      
         stage('Ansible Playbook Execution') {
             steps {
-                sh 'ansible-playbook $WORKSPACE/ansible_Jenkins.yml'
+                sh 'ansible-playbook $WORKSPACE/hupendra.yml'
             }
         }
     }
