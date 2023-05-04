@@ -8,7 +8,7 @@ pipeline {
                 checkout(
                     scm: git(
                         branches: [[name: 'refs/heads/main']],
-                        url: 'https://github.com/hupendrad4/JavaBasicPracticeCodes.git'
+                        url: 'https://github.com/hupendrad4/JenkinsAssignmentJobs.git'
                     )
                 )
             }
