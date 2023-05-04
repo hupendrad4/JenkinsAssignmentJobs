@@ -7,7 +7,7 @@ pipeline {
             steps {
                 checkout(
                     scm: git(
-                        branches: [[name: 'refs/heads/main']],
+                        branches: [[name: 'main']],
                         url: 'https://github.com/hupendrad4/JenkinsAssignmentJobs.git'
                     )
                 )
