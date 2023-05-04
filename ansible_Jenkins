@@ -5,12 +5,12 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scmGit(
-                    branches: [[name: 'refs/heads/main']],
-                    extensions: [],
-                    userRemoteConfigs: [[https://github.com/hupendrad4/JavaBasicPracticeCodes.git']]
+                checkout(
+                    scm: git(
+                        branches: [[name: 'refs/heads/main']],
+                        url: 'https://github.com/hupendrad4/JavaBasicPracticeCodes.git'
+                    )
                 )
-               )
             }
         }      
         stage('Ansible Playbook Execution') {
