@@ -5,17 +5,16 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout(
-                    scm: git(
-                        branches: [[name: 'main']],
-                        url: 'https://github.com/hupendrad4/JenkinsAssignmentJobs.git'
-                    )
-                )
+                checkout([$class: 'GitSCM',
+                    branches: [[name: 'main']],
+                    extensions: [],
+                    userRemoteConfigs: [[url: 'https://github.com/hupendrad4/JenkinsAssignmentJobs.git']]
+                ])
             }
         }      
         stage('Ansible Playbook Execution') {
             steps {
-                sh 'ansible-playbook $WORKSPACE/hupendra.yml'
+                sh 'ansible-playbook $WORKSPACE/ansible_Jenkins.yml'
             }
         }
     }
