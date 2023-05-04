@@ -10,6 +10,7 @@ pipeline {
                     extensions: [],
                     userRemoteConfigs: [[https://github.com/hupendrad4/JavaBasicPracticeCodes.git']]
                 )
+               )
             }
         }      
         stage('Ansible Playbook Execution') {
