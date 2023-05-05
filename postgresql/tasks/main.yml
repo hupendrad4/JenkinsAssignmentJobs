@@ -1,0 +1,55 @@
+    # Install PostgreSQL on source and destination hosts
+    - name: Install PostgreSQL
+      apt:
+        name: postgresql
+        state: present
+
+    # Allow remote access to PostgreSQL server
+    - name: Edit postgresql.conf for remote access
+      lineinfile:
+        path: /etc/postgresql/{{ ansible_postgresql.version }}/main/postgresql.conf
+        regexp: '^#?listen_addresses =.*$'
+        line: "listen_addresses = '*'"
+
+    # Allow remote access to PostgreSQL server by creating pg_hba.conf
+    - name: Create pg_hba.conf for remote access
+      blockinfile:
+        path: /etc/postgresql/{{ ansible_postgresql.version }}/main/pg_hba.conf
+        block: |
+          host    all             all             0.0.0.0/0               md5
+
+    # Restart PostgreSQL service after configuration change
+    - name: Restart PostgreSQL service
+      service:
+        name: postgresql
+        state: restarted
+
+    # Create backup of the database on source host
+    - name: Create database backup
+      become_user: postgres
+      postgresql_backup:
+        db_host: "{{ src_ip }}"
+        db_name: "{{ dbname }}"
+        backup_dir: /tmp/
+        backup_file_name: "{{ backup_file }}"
+      register: backup_result
+
+    # Copy backup file from source to destination host
+    - name: Copy backup file to destination host
+      copy:
+        src: "/tmp/{{ backup_file }}"
+        dest: "/tmp/{{ backup_file }}"
+        remote_src: yes
+      delegate_to: "{{ src_ip }}"
+
+    # Restore database on destination host
+    - name: Restore database
+      become_user: postgres
+      postgresql_restore:
+        db_host: "{{ dest_ip }}"
+        db_name: "{{ dbname }}"
+        restore_file: "/tmp/{{ backup_file }}"
+        restore_force: yes
+        restore_create_db: yes
+        restore_single_db: yes
+        restore_drop: yes
