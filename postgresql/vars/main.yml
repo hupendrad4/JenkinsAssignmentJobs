@@ -1,6 +1,7 @@
-    dbname: mydb
-    dbuser: myuser
-    dbpass: mypassword
-    backup_file: "{{ dbname }}.backup"
-    src_ip: 192.168.1.14
-    dest_ip: 192.168.1.12
+---
+dbname: mydb
+dbuser: myuser
+dbpass: mypassword
+backup_file: "{{ dbname }}.backup"
+src_ip: 192.168.1.14
+dest_ip: 192.168.1.12
