@@ -1,0 +1,21 @@
+pipeline {
+    agent {
+        label 'master_ansible'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM',
+                    branches: [[name: 'refs/heads/main']],
+                    extensions: [],
+                    userRemoteConfigs: [[url: 'https://github.com/hupendrad4/JenkinsAssignmentJobs.git']]
+                ])
+            }
+        }      
+        stage('Ansible Playbook Execution') {
+            steps {
+                sh 'ansible-playbook $WORKSPACE/nginx_install_task1.yml'
+            }
+        }
+    }
+}
