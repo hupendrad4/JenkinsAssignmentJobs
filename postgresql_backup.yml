@@ -1,5 +1,5 @@
 ---
 - name: Backup and restore PostgreSQL database
-  hosts: slave2
+  hosts: slave1
   become: true
   connection: ssh
