@@ -1,1 +1,21 @@
-ff
+pipeline {
+    agent {
+        label 'master_ansible'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM',
+                    branches: [[name: 'refs/heads/main']],
+                    extensions: [],
+                    userRemoteConfigs: [[url: 'https://github.com/hupendrad4/JenkinsAssignmentJobs.git']]
+                ])
+            }
+        }      
+        stage('Ansible Playbook Execution') {
+            steps {
+                sh 'ansible-playbook $WORKSPACE/postgresql_backup.yml'
+            }
+        }
+    }
+}
