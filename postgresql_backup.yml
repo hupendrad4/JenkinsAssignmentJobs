@@ -3,3 +3,5 @@
   hosts: slave1
   become: true
   connection: ssh
+  roles:
+    - postgresql
