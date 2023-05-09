@@ -1,55 +1,40 @@
----
-- name: Install PostgreSQL
-  apt:
-    name: postgresql
-    state: present
+  - name: Create database user and database
+      postgresql_user:
+        db: "{{ db_name }}"
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        login_user: postgres
+        login_password: postgres
+        login_host: localhost
+        login_unix_socket: /var/run/postgresql
+      postgresql_db:
+        name: "{{ db_name }}"
+        owner: "{{ db_user }}"
+        login_user: postgres
+        login_password: postgres
+        login_host: localhost
+        login_unix_socket: /var/run/postgresql
 
-# Allow remote access to PostgreSQL server
-- name: Edit postgresql.conf for remote access
-  lineinfile:
-    path: /etc/postgresql/{{ ansible_postgresql.version }}/main/postgresql.conf
-    regexp: '^#?listen_addresses =.*$'
-    line: "listen_addresses = '*'"
-
-# Allow remote access to PostgreSQL server by creating pg_hba.conf
-- name: Create pg_hba.conf for remote access
-  blockinfile:
-    path: /etc/postgresql/{{ ansible_postgresql.version }}/main/pg_hba.conf
-    block: |
-      host    all             all             0.0.0.0/0               md5
-
-# Restart PostgreSQL service after configuration change
-- name: Restart PostgreSQL service
-  service:
-    name: postgresql
-    state: restarted
-
-# Create backup of the database on source host
-- name: Create database backup
-  become_user: postgres
-  postgresql_backup:
-    db_host: "{{ src_ip }}"
-    db_name: "{{ dbname }}"
-    backup_dir: /tmp/
-    backup_file_name: "{{ backup_file }}"
-  register: backup_result
-
-# Copy backup file from source to destination host
-- name: Copy backup file to destination host
-  copy:
-    src: "/tmp/{{ backup_file }}"
-    dest: "/tmp/{{ backup_file }}"
-    remote_src: yes
-  delegate_to: "{{ src_ip }}"
-
-# Restore database on destination host
-- name: Restore database
-  become_user: postgres
-  postgresql_restore:
-    db_host: "{{ dest_ip }}"
-    db_name: "{{ dbname }}"
-    restore_file: "/tmp/{{ backup_file }}"
-    restore_force: yes
-    restore_create_db: yes
-    restore_single_db: yes
-    restore_drop: yes
+    - name: Restore database on another server
+      postgresql_user:
+        db: "{{ restore_db_name }}"
+        name: "{{ restore_db_user }}"
+        password: "{{ restore_db_password }}"
+        login_user: postgres
+        login_password: postgres
+        login_host: localhost
+        login_unix_socket: /var/run/postgresql
+      postgresql_db:
+        name: "{{ restore_db_name }}"
+        owner: "{{ restore_db_user }}"
+        login_user: postgres
+        login_password: postgres
+        login_host: localhost
+        login_unix_socket: /var/run/postgresql
+      postgresql_restore:
+        db: "{{ restore_db_name }}"
+        login_user: "{{ restore_db_user }}"
+        login_password: "{{ restore_db_password }}"
+        login_host: localhost
+        login_unix_socket: /var/run/postgresql
+        filename: "{{ restore_file }}"
