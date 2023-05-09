@@ -1,3 +1,4 @@
+---
 - name: Create database user and database
   postgresql_user:
     db: "{{ db_name }}"
