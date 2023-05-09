@@ -1,7 +1,9 @@
 ---
-dbname: mydb
-dbuser: myuser
-dbpass: mypassword
-backup_file: "{{ dbname }}.backup"
-src_ip: 192.168.1.14
-dest_ip: 192.168.1.12
+db_name: "mydatabase"
+    db_user: "db_user"
+    db_password: "db_user"
+    backup_file: "/tmp/mydatabase.sql"
+    restore_file: "/tmp/mydatabase.sql"
+    restore_db_name: "databese_restored"
+    restore_db_user: "db_user2"
+    restore_db_password: "db_user"
