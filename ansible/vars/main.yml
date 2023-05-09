@@ -1,5 +1,5 @@
 ---
 jenkins_http_port: 8080
-jenkins_server_name: 192.168.1.14
+jenkins_server_name: 192.168.1.12
 
 # vars file for ansible
