@@ -2,5 +2,6 @@
 - name: Install Nginx and Jenkins
   hosts: slave
   become: true
+  user: ansible
   roles:
     - ansible
