@@ -1,0 +1,4 @@
+- name: Postgres Backup and Restore
+  hosts: target:target
+  roles:
+    - backup_restore
