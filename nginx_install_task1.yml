@@ -1,6 +1,6 @@
 ---
 - name: Install Nginx and Jenkins
-  hosts: servers
+  hosts: target_hosts
   become: yes
 #   roles:
 #     - ansible
